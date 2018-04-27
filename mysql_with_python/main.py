@@ -16,3 +16,6 @@ db = MySQLDatabase(db_config.get('db_name'),
 # our database and print them out.
 tables = db.get_available_tables()
 print tables
+
+columns = db.get_columns_for_table('articles')
+print columns

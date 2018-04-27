@@ -23,7 +23,7 @@ class MySQLDatabase(object):
         except _mysql.Error, e:
             print e
     
-    def get_availble_tables(self):
+    def get_available_tables(self):
         """
         This method will allow us to see what
         tables are available to us when we're
@@ -37,6 +37,20 @@ class MySQLDatabase(object):
         cursor.close()
 
         return self.tables
+    
+    def get_columns_for_table(self, table_name):
+        """
+        This method will enable to interact
+        with our database to find what columns
+        are currently in a specific table
+        """
+        cursor = self.db.cursor()
+        cursor.execute("SHOW COLUMNS FROM '%s" % table_name)
+        self.columns = cursor.fetchall()
+
+        cursor.close()
+
+        return self.columns
     
     def __del__(self):
         """
