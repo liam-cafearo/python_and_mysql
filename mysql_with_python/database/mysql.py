@@ -22,6 +22,17 @@ class MySQLDatabase(object):
             print "Connected to MySQL!"
         except _mysql.Error, e:
             print e
+
+    def __del__(self):
+        """
+        Here we'll do a check to see if `self.db` is present.
+        This will only be the case if the connection was
+        successfully made in the initialiser.
+        Inside that condition we'll close the connection
+        """
+        if hasattr(self, 'db'):
+            self.db.close()
+            print "MySQL Connection is Closed"
     
     def get_available_tables(self):
         """
@@ -51,14 +62,3 @@ class MySQLDatabase(object):
         cursor.close()
 
         return self.columns
-    
-    def __del__(self):
-        """
-        Here we'll do a check to see if `self.db` is present.
-        This will only be the case if the connection was
-        successfully made in the initialiser.
-        Inside that condition we'll close the connection
-        """
-        if hasattr(self, 'db'):
-            self.db.close()
-            print "MySQL Connection is Closed"
