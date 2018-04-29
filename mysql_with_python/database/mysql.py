@@ -62,3 +62,48 @@ class MySQLDatabase(object):
         cursor.close()
 
         return self.columns
+    
+    def select(self, table, columns=None, named_tuples=False, **kwargs):
+        """
+        We'll create our `select` method in order
+        to make it simpler for extracting data from
+        the database.
+        select(table_name, [list_of_column_names])
+        """
+        sql_str = "SELECT "
+
+        # add columns or just use the wildcard
+        if not columns:
+            sql_str += " * "
+        else:
+            for column in columns:
+                sql_str += "%s, " % column
+
+            sql_str = sql_str[:-2] # remove the last comma!
+        
+        # add the table to the SELECT query
+        sql_str += " FROM `%s`.`%s" % (self.database_name, table)
+
+        # is there's a JOIN clause attached
+        if kwargs.has_key('join'):
+            sql_str += " JOIN %s" % kwargs.get('join')
+        
+        # if there's a WHERE clause attached
+        if kwargs.has_key('where'):
+            sql_str += " WHERE %s " % kwargs.get('where')
+        
+        sql_str += ";" # Finalise out SQL string
+
+        cursor = self.db.cursor()
+        cursor.execute(sql_str)
+
+        if named_tuples:
+            results = self.convert_to_named_tuples(cursor)
+        else:
+            results = cursor.fetchall()
+        
+        cursor.close
+
+        return results
+        
+
