@@ -1,5 +1,7 @@
 import MySQLdb as _mysql
 
+from collections import namedtuple
+
 
 class MySQLDatabase(object):
     """
@@ -104,6 +106,19 @@ class MySQLDatabase(object):
         
         cursor.close
 
+        return results
+
+    def convert_to_named_tuples(self, cursor):
+        results = None
+        column_names = [column_desc[0] for column_desc in cursor.description]
+        results_class = namedtuple('Results', column_names)
+
+        try:
+            results = [results_class.make(record)
+                        for record in cursor.fetchall()]
+        except _mysql.ProgrammingError, e:
+            print e
+        
         return results
         
 
