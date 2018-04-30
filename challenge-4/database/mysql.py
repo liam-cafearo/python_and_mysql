@@ -107,6 +107,10 @@ class MySQLDatabase(object):
         if kwargs.has_key('where'):
             sql_str += " WHERE %s " % kwargs.get('where')
         
+        # Challenge code, if there is a limit clause
+        if 'limit' in kwargs:
+            sql_str += "LIMIT %s" % kwargs.get('limit')
+        
         sql_str += ";" # Finalise out SQL string
 
         cursor = self.db.cursor()

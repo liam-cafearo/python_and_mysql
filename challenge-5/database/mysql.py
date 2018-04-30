@@ -107,6 +107,19 @@ class MySQLDatabase(object):
         if kwargs.has_key('where'):
             sql_str += " WHERE %s " % kwargs.get('where')
         
+        # Challenge-4 code, if there is a limit clause
+        if 'limit' in kwargs:
+            sql_str += "LIMIT %s" % kwargs.get('limit')
+        
+        # Challenge-5 code, if there is an ORDER clause attached
+        # For this we need both ASC and DESC
+        if 'order_asc' in kwargs:
+            sql_str += " ORDER BY %s" % kwargs.get('order_asc')
+        
+        # now for order_desc
+        if 'order_desc' in kwargs:
+            sql_str += " ORDER BY %s DESC" % kwargs.get('order_desc')
+        
         sql_str += ";" # Finalise out SQL string
 
         cursor = self.db.cursor()
