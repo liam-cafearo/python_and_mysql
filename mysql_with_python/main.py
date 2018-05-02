@@ -42,3 +42,9 @@ joined_records = db.select('people', ['first_name'],
                                         where="people.id=3",
                                         join="orders ON people.id=orders.person_id")
 print "Joined records: %s" % str(joined_records)
+
+# Delete a record from the database
+db.delete('orders', id"=3")
+
+# We can also use multiple WHERE clauses!
+db.delete('orders', id=">4", amount=">1")

@@ -120,5 +120,31 @@ class MySQLDatabase(object):
         cursor.close
 
         return results
+    
+    def delete(self, table, **wheres):
+        """
+        This function will allow us
+        to delete data from a given table
+        based on whether or not a WHERE
+        clause is present or not
+        """
+        sql_str = "DELETE FROM `%s`.`%s`" % (self.database_name, table)
+
+        if wheres is not None:
+            first_where_clause = True
+            for where, term in wheres.iteritems():
+                if first_where_clause:
+                    # This is the first WHERE clause
+                    sql_str += "WHERE `%s`.`%s` %s" % (table, where, term)
+                    first_where_clause = False
+                else:
+                    # This is an additional clause so use AND
+                    sql_str += " AND `%s`.`%s` %s" % (table, where, term)
+        sql_str += ";"
+
+        cursor = self.db.cursor()
+        cursor.execute(sql_str)
+        self.db.commit()
+        cursor.close()
         
 
