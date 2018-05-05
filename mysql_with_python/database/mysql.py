@@ -192,28 +192,28 @@ class MySQLDatabase(object):
         self.db.commit()
         cursor.close()
 
-        def update(self, table, where=None, **column_values):
-            sql_str = "UPDATE `%s`.`%s` SET " % (self.database_name, table)
+    def update(self, table, where=None, **column_values):
+        sql_str = "UPDATE `%s`.`%s` SET " % (self.database_name, table)
 
-            if column_values is not None:
-                for column_name, value in column_values.iteritems():
-                    sql_str += "`%s`=" % column_name
+        if column_values is not None:
+            for column_name, value in column_values.iteritems():
+                sql_str += "`%s`=" % column_name
 
-                    # check how we should add this to the columns string
-                    if is_number(value):
-                        # its a number so we don't add ''
-                        sql_str += "%s, " % value
-                    else:
-                        # its a date or a string so add the ''
-                        sql_str += "'%s', " % value
-            
-            sql_str = sql_str[:-2] # use list slice to strip off the last , and space character
+                # check how we should add this to the columns string
+                if is_number(value):
+                    # its a number so we don't add ''
+                    sql_str += "%s, " % value
+                else:
+                    # its a date or a string so add the ''
+                    sql_str += "'%s', " % value
+        
+        sql_str = sql_str[:-2] # use list slice to strip off the last , and space character
 
-            if where:
-                sql_str += " WHERE %s" % where
-            
-            cursor = self.db.cursor()
-            cursor.execute(sql_str)
-            self.db.commit()
-            cursor.close()        
+        if where:
+            sql_str += " WHERE %s" % where
+        
+        cursor = self.db.cursor()
+        cursor.execute(sql_str)
+        self.db.commit()
+        cursor.close()        
 
