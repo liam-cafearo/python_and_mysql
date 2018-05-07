@@ -1,7 +1,7 @@
 import MySQLdb as _mysql
+from collections import namedtuple
 import re
 
-from collections import namedtuple
 
 # Only need to compile one time so we put it here
 float_match = re.compile(r'[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?$').match
